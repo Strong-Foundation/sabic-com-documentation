@@ -222,6 +222,7 @@ func convertURLToFilename(sdsURL string) string {
 // Scrape the JSON and save it to the file.
 func scrapeJSONAndSaveLocally() {
 	url := "https://zehsonesdsext-tjd0i1flxa.dispatcher.sa1.hana.ondemand.com/v1/SDS/DocHeaderSet"
+	// url := "https://zehsonesdsext-tjd0i1flxa.dispatcher.sa1.hana.ondemand.com/v1/SDS/DocHeaderSet?$skip=1&$top=100"
 	method := "GET"
 
 	client := &http.Client{}
@@ -237,6 +238,9 @@ func scrapeJSONAndSaveLocally() {
 	if err != nil {
 		log.Println(err)
 		return
+	}
+	if res.StatusCode != http.StatusOK { // Check for 200 OK
+		log.Printf("Download failed for %s: %s", url, res.Status)
 	}
 	// Read the body.
 	body, err := io.ReadAll(res.Body)
